@@ -4,9 +4,13 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MathUtilsTest {
-    @Test
-    void testAdd() {
-        MathUtils utils = new MathUtils();
-        assertEquals(5, utils.add(2, 3), "2 + 3 phải bằng 5");
-    }
+  @Test
+  void testAdd() {
+    MathUtils utils = new MathUtils();
+    assertEquals(5, utils.add(2, 3), "2 + 3 phải bằng 5");
+  }
+  @Test
+  void testMain() {
+    MathUtils.main(new String[]{});
+  }
 }

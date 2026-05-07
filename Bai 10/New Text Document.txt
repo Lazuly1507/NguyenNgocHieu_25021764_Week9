@@ -1,0 +1,29 @@
+Error:  The goal you specified requires a project to execute but there is no POM in this directory (/home/runner/work/bai-10/bai-10). Please verify you invoked Maven from the correct directory. -> [Help 1]
+Error:  
+Error:  To see the full stack trace of the errors, re-run Maven with the -e switch.
+Error:  Re-run Maven using the -X switch to enable full debug logging.
+Error:  
+Error:  For more information about the errors and possible solutions, please read the following articles:
+Error:  [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MissingProjectException
+Error: Process completed with exit code 1.
+
+thiếu checkout code trong file ci.yml, dẫn đến lỗi khi chạy maven vì không tìm thấy pom.xml. Cần thêm bước checkout code trước khi thiết lập JDK và chạy maven. 
+
+Error:  Failed to execute goal on project shipping-app: Could not resolve dependencies for project com.lab:shipping-app:jar:1.0-SNAPSHOT
+Error:  dependency: ch.qos.logback:logback-classic:jar:9.9.9 (compile)
+Error:  	Could not find artifact ch.qos.logback:logback-classic:jar:9.9.9 in central (https://repo.maven.apache.org/maven2)
+Error:  
+Error:  -> [Help 1]
+Error:  
+Error:  To see the full stack trace of the errors, re-run Maven with the -e switch.
+Error:  Re-run Maven using the -X switch to enable full debug logging.
+Error:  
+Error:  For more information about the errors and possible solutions, please read the following articles:
+Error:  [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException
+Error: Process completed with exit code 1.
+
+Lỗi này xảy ra do Maven không thể tìm thấy artifact ch.qos.logback:logback-classic:jar:9.9.9 trong repository trung tâm của Maven. 
+do phiên bản 9.9.9 của logback-classic không tồn tại
+
+lỗi tự nghĩ: chỉnh sai test thành 15001
+sửa lại đúng test, mong đợi thực tế là 15000

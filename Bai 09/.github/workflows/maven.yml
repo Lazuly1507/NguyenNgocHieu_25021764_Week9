@@ -1,0 +1,56 @@
+name: Java CI with Advanced Quality Gates
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  quality-gate:
+    name: Checkstyle and Tests
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ] # Kiểm thử đa hệ điều hành (Bài 4)
+        java-version: [ 21 ] # Sử dụng Java 17
+    runs-on: ${{ matrix.os }}
+
+    permissions:
+      # Quan trọng để bot có thể comment vào PR
+      contents: read
+      pull-requests: write
+      checks: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: "temurin"
+          # Bài 6: Tối ưu hóa với Caching
+          cache: "maven"
+
+      - name: Build with Maven
+        # Chạy verify bao gồm: Checkstyle, Unit Test, và JaCoCo Check
+        run: mvn clean package jacoco:report checkstyle:check
+
+      # Bài 7: Inline Feedback cho Pull Request (Chỉ chạy trên Ubuntu để tránh lặp lại)
+      - name: Checkstyle Review
+        if: github.event_name == 'pull_request' && matrix.os == 'ubuntu-latest'
+        uses: dbelyaev/action-checkstyle@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          level: warning
+
+      # Bài 3 & 5: Lưu trữ Artifact (.jar và Báo cáo JaCoCo)
+      - name: Upload Build Artifacts
+        if: always() && matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: project-reports
+          path: |
+            target/*.jar
+            target/site/jacoco/
